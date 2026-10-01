@@ -19,7 +19,7 @@ RUN rm -rf "${CATALINA_HOME}/webapps/"*
 # Deploy as the root context: https://<service>.onrender.com/
 COPY --from=build /app/target/vnpay.war ${CATALINA_HOME}/webapps/ROOT.war
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV PORT=10000
 EXPOSE 10000
