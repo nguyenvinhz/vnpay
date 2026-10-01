@@ -17,7 +17,7 @@ public final class Config {
     public static final String vnp_PayUrl = getSetting(
             "VNPAY_PAY_URL", "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html");
     public static final String vnp_ReturnUrl = getSetting(
-            "VNPAY_RETURN_URL", "http://localhost:8080/vnpay/vnpay_return.jsp");
+            "VNPAY_RETURN_URL", getDefaultReturnUrl());
     public static final String vnp_TmnCode = getSetting("VNPAY_TMN_CODE", "2QXUI4J4");
     public static final String secretKey = getSetting(
             "VNPAY_HASH_SECRET", "RAOCTPBNKSTPXAGDDXQZPVXISJYVXXZP");
@@ -37,6 +37,14 @@ public final class Config {
             value = System.getProperty(name);
         }
         return value == null || value.trim().isEmpty() ? defaultValue : value.trim();
+    }
+
+    private static String getDefaultReturnUrl() {
+        String renderHostname = System.getenv("RENDER_EXTERNAL_HOSTNAME");
+        if (renderHostname != null && !renderHostname.trim().isEmpty()) {
+            return "https://" + renderHostname.trim() + "/vnpay_return.jsp";
+        }
+        return "http://localhost:8080/vnpay/vnpay_return.jsp";
     }
 
     public static String md5(String message) {
